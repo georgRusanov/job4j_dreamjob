@@ -1,0 +1,14 @@
+language: java
+jdk:
+  - openjdk11
+
+sudo: false
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  email:
+    recipients:
+      - rusanovgeorgy@gmail.com
+    on_success: never

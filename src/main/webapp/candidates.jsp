@@ -32,7 +32,7 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">Названия</th>
+                            <th scope="col">Кандидаты</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,6 +45,9 @@
                                     </a>
                                     <c:out value="${candidate.name}"/>
                                 </td>
+                                <td><img src="<c:url value='/download?name=${candidate.id}.png'/>" width="100px" height="100px"/></td>
+                                <td><input type="button" class="btn btn-primary" value="Удалить" onClick='location.href="<%=request.getContextPath()%>/delete?id=${candidate.id}"'></td>
+                                <td><input type="button" class="btn btn-primary" value="Добавить" onClick='location.href="<%=request.getContextPath()%>/upload.jsp"'></td>
                             </tr>
                         </c:forEach>
                     </tbody>
