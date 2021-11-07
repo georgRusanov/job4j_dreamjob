@@ -6,13 +6,14 @@ import java.io.IOException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ru.job4j.dream.helpers.Property;
 
 public class DownloadServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String name = req.getParameter("name");
         File downloadFile = null;
-        for (File file : new File("/home/rusanov/dream").listFiles()) {
+        for (File file : new File(Property.getProperty("photo.dir")).listFiles()) {
             if (name.equals(file.getName())) {
                 downloadFile = file;
                 break;
