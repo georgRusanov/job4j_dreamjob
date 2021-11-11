@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import ru.job4j.dream.helpers.Property;
+import ru.job4j.dream.store.DbStore;
 import ru.job4j.dream.store.Store;
 
 public class DeleteServlet extends HttpServlet {
@@ -19,8 +20,8 @@ public class DeleteServlet extends HttpServlet {
                 break;
             }
         }
-        Store.instOf().deleteCandidate(Integer.parseInt(id));
-        req.setAttribute("candidates", Store.instOf().findAllCandidates());
+        DbStore.instOf().deleteCandidate(Integer.parseInt(id));
+        req.setAttribute("candidates", DbStore.instOf().findAllCandidates());
         req.getRequestDispatcher("candidates.jsp").forward(req, resp);
     }
 }

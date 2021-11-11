@@ -133,7 +133,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return candidate;
     }
@@ -158,7 +158,7 @@ public class DbStore implements Store {
             ps.setInt(2, candidate.getId());
             ps.executeQuery();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -189,8 +189,19 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
+    }
+
+    public void deleteCandidate(int id) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("DELETE FROM candidate WHERE id = ?")
+        ) {
+            ps.setInt(1, id);
+            ps.executeQuery();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
     }
 }
