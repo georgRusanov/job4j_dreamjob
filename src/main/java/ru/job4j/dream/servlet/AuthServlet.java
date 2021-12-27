@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import javax.servlet.http.HttpSession;
+import ru.job4j.dream.model.User;
 
 public class AuthServlet extends HttpServlet {
     @Override
@@ -12,6 +14,11 @@ public class AuthServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         if ("root@local".equals(email) && "root".equals(password)) {
+            HttpSession sc = req.getSession();
+            User admin = new User();
+            admin.setName("Admin");
+            admin.setEmail(email);
+            sc.setAttribute("user", admin);
             resp.sendRedirect(req.getContextPath() + "/posts.do");
         } else {
             req.setAttribute("error", "Не верный email или пароль");
