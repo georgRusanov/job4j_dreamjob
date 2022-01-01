@@ -1,8 +1,11 @@
 package ru.job4j.dream.store;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.List;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 import org.junit.Test;
@@ -38,12 +41,8 @@ public class DbStoreTest {
         Post post2 = new Post(3, "Java Job3");
         store.savePost(post2);
         ArrayList<Post> posts = (ArrayList<Post>) store.findAllPosts();
-        assertEquals(
-                posts.stream().filter(x -> x.getId() == 2).findFirst().get().getName(),
-                post.getName());
-        assertEquals(
-                posts.stream().filter(x -> x.getId() == 3).findFirst().get().getName(),
-                post2.getName());
+        ArrayList<Post> expectedPosts = new ArrayList<>(List.of(post, post2));
+        assertTrue(posts.containsAll(expectedPosts));
     }
 
     @Test
@@ -53,12 +52,8 @@ public class DbStoreTest {
         Candidate candidate2 = new Candidate(3, "Name3");
         store.saveCandidate(candidate2);
         ArrayList<Candidate> candidates =  (ArrayList<Candidate>) store.findAllCandidates();
-        assertEquals(
-                candidates.stream().filter(x -> x.getId() == 2).findFirst().get().getName(),
-                candidate.getName());
-        assertEquals(
-                candidates.stream().filter(x -> x.getId() == 3).findFirst().get().getName(),
-                candidate2.getName());
+        ArrayList<Candidate> expectedCandidates = new ArrayList<>(List.of(candidate, candidate2));
+        assertTrue(candidates.containsAll(expectedCandidates));
     }
 
     @Test
@@ -67,7 +62,7 @@ public class DbStoreTest {
         store.saveCandidate(candidate);
         store.deleteCandidate(candidate.getId());
         Candidate actual = store.findCandidateById(candidate.getId());
-        assertEquals(null, actual);
+        assertNull(actual);
 
     }
 }
