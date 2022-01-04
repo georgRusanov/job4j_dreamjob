@@ -156,7 +156,7 @@ public class DbStore implements Store {
         ) {
             ps.setString(1, candidate.getName());
             ps.setInt(2, candidate.getId());
-            ps.executeQuery();
+            ps.executeUpdate();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -199,7 +199,7 @@ public class DbStore implements Store {
              PreparedStatement ps =  cn.prepareStatement("DELETE FROM candidate WHERE id = ?")
         ) {
             ps.setInt(1, id);
-            ps.executeQuery();
+            ps.executeUpdate();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
