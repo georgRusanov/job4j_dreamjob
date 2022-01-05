@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS candidate (
   name TEXT
 );
 
-CREATE TABLE candidate (
+CREATE TABLE IF NOT EXISTS users (
    id SERIAL PRIMARY KEY,
    name TEXT,
    email TEXT,
