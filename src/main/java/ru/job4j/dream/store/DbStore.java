@@ -1,5 +1,7 @@
 package ru.job4j.dream.store;
 
+import java.util.Map;
+import java.util.Optional;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
+import ru.job4j.dream.model.User;
 
 public class DbStore implements Store {
     private final BasicDataSource pool = new BasicDataSource();
@@ -138,6 +141,26 @@ public class DbStore implements Store {
         return candidate;
     }
 
+    private User create(User user) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("INSERT INTO user(name, email, password) VALUES (?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    user.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return user;
+    }
+
     private void update(Post post) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps =  cn.prepareStatement("UPDATE post SET name = ? WHERE id = ?")
@@ -203,5 +226,33 @@ public class DbStore implements Store {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void saveUser(User user) {
+        if (user.getId() == 0) {
+            create(user);
+        }
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM user WHERE email = ?")
+        ) {
+            ps.setString(1, email);
+            try (ResultSet it = ps.executeQuery()) {
+                if (it.next()) {
+                    return new User(
+                            it.getInt("id"),
+                            it.getString("name"),
+                            it.getString("email"),
+                            it.getString("password"));
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
     }
 }

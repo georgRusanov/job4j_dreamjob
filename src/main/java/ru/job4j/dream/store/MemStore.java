@@ -1,5 +1,6 @@
 package ru.job4j.dream.store;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
@@ -7,14 +8,17 @@ import ru.job4j.dream.model.Post;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import ru.job4j.dream.model.User;
 
 public class MemStore implements Store {
 
     private static final MemStore INST = new MemStore();
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
+    private final Map<Integer, User> users = new ConcurrentHashMap<>();
     private static AtomicInteger POST_ID = new AtomicInteger(4);
     private static AtomicInteger CANDIDATE_ID = new AtomicInteger(4);
+    private static AtomicInteger USER_ID = new AtomicInteger(4);
 
     private MemStore() {
         posts.put(1, new Post(1, "Junior Java Job", "first"));
@@ -61,5 +65,24 @@ public class MemStore implements Store {
 
     public void deleteCandidate(int id) {
         candidates.remove(id);
+    }
+
+    @Override
+    public void saveUser(User user) {
+        if (user.getId() == 0) {
+            user.setId(CANDIDATE_ID.incrementAndGet());
+        }
+        users.put(user.getId(), user);
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return users
+                .entrySet()
+                .stream()
+                .filter(e -> e.getValue().getEmail().equals(email))
+                .findFirst()
+                .map(Map.Entry::getValue)
+                .orElse(null);
     }
 }
