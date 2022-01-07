@@ -21,8 +21,10 @@
         }
         function addRow() {
             const name = $('#name').val();
+            const surname = $('#surname').val();
+            const description = $('#description').val();
 
-            $('#table tr:last').after('<tr><td>' + name +'</td></tr>');
+            $('#table tr:last').after('<tr><td>' + name +'</td><td>' + surname +'</td><td>' + description +'</td></tr>');
         }
 
     </script>
@@ -52,24 +54,11 @@
         <table class="table" id="table">
             <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
+                <th scope="col">Name</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Description</th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-            </tr>
-            </tbody>
         </table>
     </div>
     <div>
