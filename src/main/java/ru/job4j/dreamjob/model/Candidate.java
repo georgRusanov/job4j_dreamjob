@@ -36,6 +36,10 @@ public class Candidate {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public LocalDateTime getCreationDate() {
         return creationDate;
     }
